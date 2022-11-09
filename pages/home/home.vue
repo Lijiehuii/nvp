@@ -1,7 +1,7 @@
 <template>
-	<view>
+	<view class="home-view">
 		<!-- 首页轮播图 -->
-		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" :circular="true">
+		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" :circular="true" indicator-color="#fff">
 			<swiper-item v-for="(item,i) in swiperList" :key="i">
 				<navigator class="swiper-item" :url="'/subpkg/goods_detail/goods_detail?goods_id='+item.goods_id">
 					<image :src="item.image_src"></image>
@@ -101,6 +101,10 @@
 </script>
 
 <style lang="scss" scoped>
+	.home-view {
+		background-color: #fff;
+	}
+
 	swiper {
 		height: 330rpx;
 
