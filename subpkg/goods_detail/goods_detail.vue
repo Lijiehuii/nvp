@@ -1,6 +1,6 @@
 <template>
 	<view>
-		
+		这是商品详情
 	</view>
 </template>
 
@@ -8,7 +8,7 @@
 	export default {
 		data() {
 			return {
-				
+
 			};
 		}
 	}

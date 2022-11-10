@@ -1,5 +1,8 @@
 <template>
 	<view class="cate">
+		<!-- 自定义的搜索组件 -->
+		<!-- <my-search :bgcolor="'pink'" :radius="13"></my-search> -->
+		<my-search @mySearch="goToSearch "></my-search>
 		<view class="scroll-view-container">
 			<!-- 左侧滑动区 -->
 			<scroll-view class="left" scroll-y="true" :style="{height: wh+'px'}">
@@ -43,7 +46,7 @@
 			this.getCateList()
 
 			// 获取设备可用高度
-			this.wh = uni.getSystemInfoSync().windowHeight
+			this.wh = uni.getSystemInfoSync().windowHeight - 50
 			console.log("this.wh", this.wh);
 		},
 		methods: {
@@ -71,6 +74,11 @@
 			goToGoodsList(item) {
 				uni.navigateTo({
 					url: '/subpkg/goods_list/goods_list?cid=' + item.cat_id
+				})
+			},
+			goToSearch() {
+				uni.navigateTo({
+					url: "/subpkg/search/search"
 				})
 			}
 		}
