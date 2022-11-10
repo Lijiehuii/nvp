@@ -72,6 +72,7 @@
 				this.scrollTop = this.scrollTop === 0 ? 1 : 0
 			},
 			goToGoodsList(item) {
+				console.log(item.cat_id);
 				uni.navigateTo({
 					url: '/subpkg/goods_list/goods_list?cid=' + item.cat_id
 				})
