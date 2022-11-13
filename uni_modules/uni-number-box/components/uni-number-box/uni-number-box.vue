@@ -1,12 +1,14 @@
 <template>
 	<view class="uni-numbox">
 		<view @click="_calcValue('minus')" class="uni-numbox__minus uni-numbox-btns" :style="{background}">
-			<text class="uni-numbox--text" :class="{ 'uni-numbox--disabled': inputValue <= min || disabled }" :style="{color}">-</text>
+			<text class="uni-numbox--text" :class="{ 'uni-numbox--disabled': inputValue <= min || disabled }"
+				:style="{color}">-</text>
 		</view>
 		<input :disabled="disabled" @focus="_onFocus" @blur="_onBlur" class="uni-numbox__value" type="number"
-			v-model="inputValue" :style="{background, color}" />
+			v-model="inputValue" :style="{inputBackground, color}" />
 		<view @click="_calcValue('plus')" class="uni-numbox__plus uni-numbox-btns" :style="{background}">
-			<text class="uni-numbox--text" :class="{ 'uni-numbox--disabled': inputValue >= max || disabled }" :style="{color}">+</text>
+			<text class="uni-numbox--text" :class="{ 'uni-numbox--disabled': inputValue >= max || disabled }"
+				:style="{color}">+</text>
 		</view>
 	</view>
 </template>
@@ -50,6 +52,10 @@
 			step: {
 				type: Number,
 				default: 1
+			},
+			inputBackground: {
+				type: String,
+				default: '#fff'
 			},
 			background: {
 				type: String,
@@ -132,6 +138,7 @@
 			_onBlur(event) {
 				this.$emit('blur', event)
 				let value = event.detail.value;
+				// let value = parseInt(event.detail.value);
 				if (isNaN(value)) {
 					this.inputValue = this.min;
 					return;
@@ -154,7 +161,7 @@
 		}
 	};
 </script>
-<style lang="scss" >
+<style lang="scss">
 	$box-height: 26px;
 	$bg: #f5f5f5;
 	$br: 2px;

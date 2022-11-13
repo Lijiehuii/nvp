@@ -32,20 +32,26 @@
 </template>
 
 <script>
+	import {
+		mapState,
+		mapMutations,
+		mapGetters
+	} from "vuex"
 	export default {
+		computed: {
+			...mapState('m_cart', ['cart']),
+			...mapGetters('m_cart', ['total'])
+		},
 		data() {
 			return {
 				goods_info: [],
 				options: [{
 					icon: 'shop',
 					text: '店铺',
-					info: 2,
-					infoBackgroundColor: '#ff0000',
-					infoColor: "#fff"
 				}, {
 					icon: 'cart',
 					text: '购物车',
-					info: 2
+					info: 0
 				}],
 				buttonGroup: [{
 						text: '加入购物车',
@@ -60,12 +66,29 @@
 				]
 			};
 		},
+		watch: {
+			// total(newVal) {
+			// 	const findResult = this.options.find(o => o.text === "购物车")
+			// 	if (findResult) {
+			// 		findResult.info = newVal
+			// 	}
+			// },
+			total: {
+				handler(newVal) {
+					const findResult = this.options.find(o => o.text === "购物车")
+					if (findResult) {
+						findResult.info = newVal
+					}
+				},
+				immediate: true
+			}
+		},
 		onLoad(options) {
 			const goods_id = options.goods_id
-			console.log("goods_id", goods_id);
 			this.getGoodsDetail(goods_id)
 		},
 		methods: {
+			...mapMutations("m_cart", ["addToCart"]),
 			async getGoodsDetail(goods_id) {
 				const {
 					data: res
@@ -78,7 +101,6 @@
 				res.message.goods_introduce = res.message.goods_introduce.replace(/<img /g,
 					'<img style="display:block;"').replace(/webp/g, 'jpg')
 				this.goods_info = res.message
-				console.log("this.goods_info=>", this.goods_info);
 			},
 			preview(i) {
 				uni.previewImage({
@@ -87,12 +109,29 @@
 				})
 			},
 			onClick(item) {
-				console.log(item);
-				if (item.content.text === "购物车") {
+				if (item.content.text === "店铺") {
+					console.log("店铺");
+				} else if (item.content.text === "购物车") {
 					console.log("购物车");
 					uni.switchTab({
 						url: "/pages/cart/cart"
 					})
+				}
+			},
+			buttonClick(item) {
+				if (item.content.text === "加入购物车") {
+					console.log("加入购物车");
+					const goods = {
+						goods_id: this.goods_info.goods_id,
+						goods_name: this.goods_info.goods_name,
+						goods_price: this.goods_info.goods_price,
+						goods_count: 1,
+						goods_small_logo: this.goods_info.goods_small_logo,
+						goods_state: true
+					}
+					this.addToCart(goods)
+				} else if (item.content.text === "立即购买") {
+					console.log("立即购买");
 				}
 			}
 		}
