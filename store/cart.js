@@ -55,6 +55,7 @@ export default {
 		checkedCount(state) {
 			return state.cart.filter(g => g.goods_state).reduce((total, item) => total += item.goods_count, 0)
 		},
+		// 已选商品的总价格
 		checkedGoodsTotalPrice(state) {
 			return state.cart.filter(g => g.goods_state).reduce((total, item) => total += item.goods_count * item
 					.goods_price, 0)

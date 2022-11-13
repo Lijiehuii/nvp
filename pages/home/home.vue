@@ -66,7 +66,6 @@
 					return uni.$showMsg()
 				}
 				this.swiperList = res.message
-				console.log("this.swiperList=>", this.swiperList);
 			},
 			async getNavList() {
 				const {
@@ -76,7 +75,6 @@
 					return uni.$showMsg()
 				}
 				this.navList = res.message
-				console.log("this.navList=>", this.navList);
 			},
 			async getFloorList() {
 				const {
@@ -91,7 +89,6 @@
 					})
 				})
 				this.floorList = res.message
-				console.log("this.floorList=>", this.floorList);
 			},
 			navClick(item) {
 				console.log(item);

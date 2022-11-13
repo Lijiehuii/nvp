@@ -50,18 +50,14 @@
 		methods: {
 			...mapMutations('m_cart', ['updateGoodsState', 'updateGoodsCount', 'removeGoods']),
 			radioChangeHandle(e) {
-				console.log("商品的勾选状态发生了改变!");
 				this.updateGoodsState(e)
 			},
 			numberChangeHandler(e) {
-				console.log("商品的数值发生了改变!");
 				this.updateGoodsCount(e)
 			},
 			swipeItemClickHandler(goods) {
-				console.log("商品被删除了!");
 				this.removeGoods(goods.goods_id)
 				this.setBadge()
-				console.log(this.cart);
 			},
 		}
 

@@ -49,7 +49,6 @@
 
 			// 获取设备可用高度
 			this.wh = uni.getSystemInfoSync().windowHeight - 50
-			console.log("this.wh", this.wh);
 		},
 		methods: {
 			// 获取分类页面的数据
@@ -63,8 +62,6 @@
 				this.cateList = res.message
 				// 起始的二级分类的值
 				this.cateListLevel2 = this.cateList[0].children
-
-				console.log("this.cataList=>", this.cateList);
 			},
 			setCateSelect(i) {
 				this.cateSelect = i
@@ -74,7 +71,6 @@
 				this.scrollTop = this.scrollTop === 0 ? 1 : 0
 			},
 			goToGoodsList(item) {
-				console.log(item.cat_id);
 				uni.navigateTo({
 					url: '/subpkg/goods_list/goods_list?cid=' + item.cat_id
 				})

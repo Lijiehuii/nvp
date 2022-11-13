@@ -14,14 +14,22 @@ uni.$http = $http
 $http.baseUrl = 'https://api-hmugo-web.itheima.net'
 
 // 请求拦截器
-$http.beforeRequest = function(option) {
+$http.beforeRequest = function(options) {
 	uni.showLoading({
 		title: "数据加载中..."
 	})
+
+	console.log(options);
+	console.log(store);
+	if (options.url.indexOf('/my/') !== -1) {
+		options.header = {
+			Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIzLCJpYXQiOjE1NjQ3MzAwNzksImV4cCI6MTAwMTU2NDczMDA3OH0.YPt-XeLnjV-_1ITaXGY2FhxmCe4NvXuRnRB8OMCfnPo"
+		}
+	}
 }
 
 // 响应拦截器
-$http.afterRequest = function(option) {
+$http.afterRequest = function() {
 	uni.hideLoading()
 }
 
