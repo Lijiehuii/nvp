@@ -1,25 +1,28 @@
 <template>
 	<view class="mine-view">
-		<my-login v-if="token === ''"></my-login>
-		<my-userinfo v-else></my-userinfo>
+		<view class="login" v-if='token === ""'>
+			<my-login></my-login>
+		</view>
+		<view class="userinfo" v-else="!token">
+			<my-userinfo></my-userinfo>
+		</view>
 	</view>
 </template>
 
 <script>
-	import badgeMix from "@/mixins/tabbar-badge.js"
 	import {
 		mapState
 	} from 'vuex'
 	export default {
-		mixins: [badgeMix],
 		data() {
 			return {
 
 			};
 		},
+		onLoad() {},
 		computed: {
-			...mapState('m_user', ['token'])
-		}
+			...mapState('m_user', ['token', "followUserData"])
+		},
 	}
 </script>
 

@@ -1,28 +1,41 @@
 <template>
 	<view class="search-view">
 		<view class="search-bar">
-			<uni-search-bar :radius="100" cancelButton="none" :focus="true" @input="input" @cancel="cancel">
+			<uni-search-bar v-model="keyword" :radius="100" cancelButton="none" :focus="true" @input="input"
+				@cancel="cancel">
 			</uni-search-bar>
 		</view>
 		<view class="search-list" v-if="searchList.length !== 0">
-			<view class="search-item" v-for="(item,i) in searchList" :key="i" @click="goToDetail(item.goods_id)">
-				<view class="goods-name">{{item.goods_name}}</view>
-				<uni-icons type="arrowright" size="16"></uni-icons>
-			</view>
+			<card-list v-for="(item,i) in searchList" :key="i" @click="goToDetail( )" :CardData="item">
+			</card-list>
 		</view>
-		<view class="history-box" v-else="searchList.length === 0">
-			<view class="history-title">
-				<text>搜索历史</text>
-				<uni-icons type="trash-filled" size="17" @click="cleanHistoryList"></uni-icons>
+		<view v-else="searchList.length === 0">
+			<view class="history-box" v-if="historyList.length !== 0">
+				<view class="history-title">
+					<text>搜索历史</text>
+					<uni-icons type="trash-filled" size="20" @click="cleanHistoryList"></uni-icons>
+				</view>
+				<view class="history-list">
+					<view class="list-item" v-for="(item,i) in histories" :key="i" @click="goToSearch(item)">{{item}}
+					</view>
+				</view>
 			</view>
-			<view class="history-list">
-				<uni-tag :text="item" v-for="(item,i) in histories" :key="i" @click="goToGoodsList(item)"></uni-tag>
+			<view class="hotkeyword-box">
+				<view class="hotkeyword-title">
+					<text>热门搜索</text>
+				</view>
+				<view class="hotkeyword-list">
+					<view class="list-item" v-for="(item,i) in hotkeyword" :key="i" @click="goToSearch(item.name)">
+						{{item.name}}
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import hotkeyword from "../../static/apijs/hotkeyword.js"
 	export default {
 		data() {
 			return {
@@ -30,11 +43,13 @@
 				timer: null,
 				keyword: "",
 				searchList: [],
-				historyList: []
+				historyList: [],
+				hotkeyword: hotkeyword.list
 			};
 		},
 		onLoad() {
 			this.historyList = JSON.parse(uni.getStorageSync("keyword") || '[]')
+			// this.getHotkeyword()
 		},
 		methods: {
 			input(e) {
@@ -51,25 +66,32 @@
 					this.searchList = []
 					return
 				}
-
 				const {
 					data: res
 				} =
-				await uni.$http.get("/api/public/v1/goods/qsearch", {
-					query: this.keyword
-				})
-				if (res.meta.status !== 200) {
-					return uni.$showMsg()
+				await uni.$http.get("/xpc/search?kw=" + this.keyword + "&sort=hot")
+				console.log(res);
+				if (!res.data?.list) {
+					return uni.$showMsg("正在努力搜索,请耐心等候~")
 				}
-				this.searchList = res.message;
+				this.searchList = res.data.list;
 				console.log("this.searchList", this.searchList);
 				this.saveSearchHistory()
 			},
-			goToDetail(id) {
-				console.log(id);
-				uni.navigateTo({
-					url: '/subpkg/goods_detail/goods_detail?goods_id=' + id
-				})
+			// async getHotkeyword() {
+			// 	const {
+			// 		data: res
+			// 	} = await uni.$http.get("/xpc/search/recommend_kws")
+			// 	this.hotkeyword = res.data.list
+			// 	console.log("this.hotkeyword=>", this.hotkeyword);
+			// },
+			goToDetail() {
+				console.log(123);
+			},
+			goToSearch(item) {
+				console.log(item);
+				this.keyword = item
+				this.getSearchList()
 			},
 			saveSearchHistory() {
 				this.historyList = this.historyList.filter(h => {
@@ -82,11 +104,6 @@
 				this.historyList = []
 				uni.setStorageSync("keyword", '[]')
 			},
-			goToGoodsList(keyword) {
-				uni.navigateTo({
-					url: '/subpkg/goods_list/goods_list?query=' + keyword
-				})
-			}
 		},
 		computed: {
 			histories() {
@@ -104,44 +121,36 @@
 
 		.search-list {
 			padding: 0 5px;
-
-			.search-item {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				font-size: 12px;
-				padding: 13px 0;
-				border-bottom: 1px solid #efefef;
-
-				.goods-name {
-					white-space: nowrap;
-					overflow: hidden;
-					text-overflow: ellipsis;
-				}
-			}
 		}
 
-		.history-box {
-			padding: 0 5px;
+		.history-box,
+		.hotkeyword-box {
+			padding: 0 20rpx;
+			margin-bottom: 20rpx;
 
-			.history-title {
+			.history-title,
+			.hotkeyword-title {
 				display: flex;
 				justify-content: space-between;
 				height: 40px;
-				font-size: 13px;
+				font-size: 30rpx;
 				align-items: center;
 			}
 
-			.history-list {
+			.history-list,
+			.hotkeyword-list {
 				display: flex;
 				flex-wrap: wrap;
+				font-size: 24rpx;
 
-				.uni-tag {
-					margin-top: 5px;
-					margin-right: 5px;
+				.list-item {
+					padding: 10rpx 20rpx;
+					margin: 0 25rpx 25rpx 0;
 					background-color: #efefef;
-					color: #000;
+					color: black;
 					border: none;
+					font-weight: bold;
+					border-radius: 8rpx;
 				}
 			}
 		}

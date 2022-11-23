@@ -1,152 +1,222 @@
 <template>
 	<view class="cate">
-		<!-- 自定义的搜索组件 -->
-		<!-- <my-search :bgcolor="'pink'" :radius="13"></my-search> -->
-		<my-search @mySearch="goToSearch "></my-search>
-		<view class="scroll-view-container">
-			<!-- 左侧滑动区 -->
-			<scroll-view class="left" scroll-y="true" :style="{height: wh+'px'}">
-				<block v-for="(item,i) in cateList" :key="i">
-					<view class="left-scroll-view-item" :class="{active:cateSelect === i }" @click="setCateSelect(i)">
-						{{item.cat_name}}
-					</view>
-				</block>
-			</scroll-view>
-			<!-- 右侧滑动区 -->
-			<scroll-view class="right" scroll-y="true" :style="{height: wh+'px'}" :scroll-top="scrollTop">
-				<view class="cate-lv2" v-for="(item2,i2) in cateListLevel2" :key="i2">
-					<view class="cate-lv2-title">
-						/ {{item2.cat_name}} /
-					</view>
-					<view class="cate-lv3-list">
-						<view class="cate-lv3-list-item" v-for="(item3,i3) in item2.children" :key="i3"
-							@click="goToGoodsList(item3)">
-							<image :src="item3.cat_icon.replace('dev','web')"></image>
-							<text>{{item3.cat_name}}</text>
+		<view class="search">
+			<view class="search-bar" @click="goToSearch">
+				<my-search :bgcolor="'#fff'"></my-search>
+			</view>
+		</view>
+		<view class="mian">
+			<view class="banner">
+				<swiper :autoplay="true" circular :interval="3000" :duration="1000" @change="swiperChange">
+					<swiper-item v-for="(item,i) in swiperList" :key="i">
+						<view class="swiper-item">
+							<image :src="item.cover"></image>
 						</view>
+					</swiper-item>
+				</swiper>
+				<view class="banner-current"><text class="current">{{current}}</text>/{{swiperList.length}}</view>
+			</view>
+			<!-- <view class="recommended">
+				<view class="recommended-list" v-for="r in recommended" :key="r.title">
+					<view class="img">
+						<image :src="r.icon" mode=""></image>
+					</view>
+					<view class="recommended-title">{{r.title}}</view>
+				</view>
+			</view> -->
+			<view class="categories">
+				<view class="creation">作品</view>
+				<view class="categories-item">
+					<view class="img" v-for="c in categories" :key="c.id" @click="goToCateList(c)">
+						<van-image width="100%" height="100%" use-loading-slot show-loading show-error lazy-load
+							radius="10" :src="'https://images.weserv.nl/?url='+c.cover">
+							<van-loading slot="loading" type="spinner" size="20" vertical />
+						</van-image>
+						<view class="categories-title">{{c.category_name}}</view>
 					</view>
 				</view>
-			</scroll-view>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import badgeMix from "@/mixins/tabbar-badge.js"
+	import cateData from "../../static/apijs/cateData.js"
+	import getTime from "../../utils/index.js"
 	export default {
-		mixins: [badgeMix],
 		data() {
 			return {
-				wh: 0,
-				cateList: [],
-				cateSelect: 0,
-				cateListLevel2: [],
-				scrollTop: 0
+				current: 1,
+				discoverData: {},
+				swiperList: [],
+				recommended: [],
+				categories: [],
 			};
 		},
 		onLoad() {
-			this.getCateList()
-
-			// 获取设备可用高度
-			this.wh = uni.getSystemInfoSync().windowHeight - 50
+			this.getDiscover()
 		},
 		methods: {
-			// 获取分类页面的数据
-			async getCateList() {
-				const {
-					data: res
-				} = await uni.$http.get('/api/public/v1/categories')
-				if (res.meta.status !== 200) {
-					return uni.$showMsg()
-				}
-				this.cateList = res.message
-				// 起始的二级分类的值
-				this.cateListLevel2 = this.cateList[0].children
+			swiperChange(e) {
+				this.current = e.detail.current + 1
 			},
-			setCateSelect(i) {
-				this.cateSelect = i
-
-				this.cateListLevel2 = this.cateList[i].children;
-
-				this.scrollTop = this.scrollTop === 0 ? 1 : 0
-			},
-			goToGoodsList(item) {
-				uni.navigateTo({
-					url: '/subpkg/goods_list/goods_list?cid=' + item.cat_id
-				})
+			async getDiscover() {
+				this.discoverData = cateData
+				this.swiperList = this.discoverData.banners
+				this.recommended = this.discoverData.recommended_position
+				this.categories = this.discoverData.categories
+				console.log("this.discoverData=>", this.discoverData);
+				console.log("this.swiperList=>", this.swiperList);
+				console.log("this.recommended=>", this.recommended);
+				console.log("this.categories=>", this.categories);
 			},
 			goToSearch() {
+				console.log(123);
 				uni.navigateTo({
 					url: "/subpkg/search/search"
+				})
+			},
+			goToCateList(c) {
+				console.log(c);
+				uni.navigateTo({
+					url: "/subpkg/cate_list/cate_list?cate_id=" + c.id + "&cate_title=" + c.category_name
 				})
 			}
 		}
 	}
 </script>
 
-<style lang="scss">
-	// .cate {
-	// 	background-color: #fff;
-	// }
-	.scroll-view-container {
-		display: flex;
+<style lang="scss" scoped>
+	.search {
+		position: sticky;
+		top: 0;
+		left: 0;
+		border-bottom: 1px solid #eee;
+		background-color: #fff;
+		z-index: 999;
 
-		.left {
-			width: 120px;
+		.search-bar {
 
-			.left-scroll-view-item {
-				background-color: #f7f7f7;
-				line-height: 60px;
-				text-align: center;
-				font-size: 12px;
-
-				&.active {
-					background-color: #FFFFFF;
-					position: relative;
-
-					&::before {
-						position: absolute;
-						top: 50%;
-						left: 0;
-						transform: translateY(-50%);
-						content: "";
-						display: block;
-						width: 3px;
-						height: 30px;
-						background-color: #C00000;
-						border-radius: 999px;
-					}
-				}
+			.ticps {
+				margin-left: 20rpx;
+				color: #666;
 			}
 		}
+	}
 
-		.cate-lv2-title {
-			font-size: 12px;
-			font-weight: bold;
-			text-align: center;
-			padding: 15px 0;
+
+	.mian {
+		padding: 20rpx;
+		box-sizing: border-box;
+	}
+
+	swiper {
+		width: 100%;
+		height: 350rpx;
+
+		swiper-item {
+			height: 350rpx;
 		}
 
-		.cate-lv3-list {
-			display: flex;
-			flex-wrap: wrap;
+		image {
+			display: block;
+			width: 100%;
+			height: 350rpx;
+			border-radius: 8px;
+		}
+	}
 
-			.cate-lv3-list-item {
-				width: 33.3%;
+
+	.line {
+		position: absolute;
+		display: block;
+		width: 100vw;
+		height: 1px;
+		background-color: #000;
+	}
+
+	.banner {
+		position: relative;
+		margin-bottom: 30rpx;
+
+		.banner-current {
+			position: absolute;
+			right: 10px;
+			bottom: 0;
+			padding: 10rpx 0;
+			font-size: 28rpx;
+			color: #fff;
+
+			.current {
+				font-weight: bold;
+				font-size: 34rpx;
+			}
+		}
+	}
+
+	.recommended {
+		display: flex;
+		font-size: 12px;
+
+		.recommended-list {
+			width: 25%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			.img {
 				display: flex;
-				flex-direction: column;
 				justify-content: center;
 				align-items: center;
-				margin-bottom: 10px;
+				width: 80rpx;
+				height: 80rpx;
+				border: 1px solid #eee;
+				border-radius: 999px;
+				box-shadow: 1rpx 5rpx 10rpx 8rpx rgba(225, 225, 225, 1.0);
+				margin-bottom: 30rpx;
 
 				image {
 					display: block;
-					width: 60px;
-					height: 60px;
+					width: 50rpx;
+					height: 50rpx;
+				}
+			}
+
+		}
+	}
+
+	.categories {
+		margin-top: 30rpx;
+
+		.creation {
+			font-size: 16px;
+			margin-bottom: 30rpx;
+		}
+
+		.categories-item {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+
+			.img {
+				width: 45vmin;
+				height: 35vmin;
+				position: relative;
+				margin-bottom: 30rpx;
+
+				image {
+					display: block;
+					width: 100%;
+					height: 100%;
+					border-radius: 20rpx;
 				}
 
-				text {
-					font-size: 12px;
+				.categories-title {
+					position: absolute;
+					top: 20rpx;
+					left: 20rpx;
+					color: #fff;
 				}
 			}
 		}

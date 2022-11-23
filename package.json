@@ -1,5 +1,5 @@
 {
-  "name": "easy-shopping",
+  "name": "nvp",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitee.com:Li_JieHui/easy-shopping.git"
+    "url": "git@gitee.com:Li_JieHui/nvp.git"
   },
   "keywords": [],
   "author": "",

@@ -6,6 +6,12 @@
 		},
 		onShow: function() {
 			// console.log('App Show')
+
+		},
+		onLoad() {
+			// if (this.userinfo === {}) {
+			// 	this.getUserProfile()
+			// }
 		},
 		onHide: function() {
 			// console.log('App Hide')
@@ -17,7 +23,7 @@
 	/*每个页面公共css */
 	@import '@/uni_modules/uni-scss/index.scss';
 	/* #ifndef APP-NVUE */
-	@import '@/static/customicons.css';
+	@import './wxcomponents/common/index.wxss';
 
 	// 设置整个项目的背景色
 	page {

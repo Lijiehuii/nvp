@@ -1,7 +1,6 @@
 <template>
 	<view class="login-view">
 		<uni-icons type="contact-filled" size="100" color="#aaa"></uni-icons>
-		<!-- <button type="primary" class="login-btn" @click="getUserInfo">一键登录</button> -->
 		<button type="primary" class="login-btn" @click="getUserProfile">一键登录</button>
 		<text class="tips-text">登录后解锁更多权益</text>
 	</view>
@@ -30,13 +29,11 @@
 					desc: '用来授权登录该小程序!',
 					success: (userInfo) => {
 						uni.$showMsg('登录成功!')
-						console.log("用户信息", userInfo);
 						this.updateUserInfo(userInfo.userInfo)
 						this.getToken(userInfo)
 					},
 					fail: (err) => {
-						console.log(err);
-						uni.$showMsg('登录失败!')
+						uni.$showMsg('登录失败!', "123")
 					},
 					complete: () => {},
 				})
@@ -45,38 +42,29 @@
 				// 获取code的值
 				const [err, res] = await uni.login().catch(err => err);
 				if (err || res.errMsg !== "login:ok") {
-					return uni.$showMsg("登录失败!")
+					return uni.$showMsg("登录失败!", "213")
 				}
-				console.log("code=>", res.code);
-				const query = {
-					code: res.code,
-					encryptedData: userInfo.encryptedData,
-					iv: userInfo.iv,
-					signature: userInfo.signature
-				}
+				// const query = {
+				// 	code: res.code,
+				// 	encryptedData: userInfo.encryptedData,
+				// 	iv: userInfo.iv,
+				// 	signature: userInfo.signature
+				// }
 
-				console.log(query);
-				const {
-					data: loginResult
-				} = await uni.$http.post('/api/public/v1/users/wxlogin', query)
-				console.log(loginResult);
-				console.log(res.code);
-				console.log("2323=>", this.redirectInfo);
-				// this.updateToken(res.code)
+				// const {
+				// 	data: loginResult
+				// } = await uni.$http.post('/api/public/v1/users/wxlogin', query)
 				this.updateToken(
 					"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIzLCJpYXQiOjE1NjQ3MzAwNzksImV4cCI6MTAwMTU2NDczMDA3OH0.YPt-XeLnjV-_1ITaXGY2FhxmCe4NvXuRnRB8OMCfnPo"
 				)
 				this.navigeteBack()
-				if (loginResult.meta.status !== 400) {
-					return uni.$showMsg("登录失败!")
-				}
+				// if (loginResult.meta.status !== 400) {
+				// 	return uni.$showMsg("登录失败!")
+				// }
 
 			},
 			navigeteBack() {
-				console.log(456);
-				console.log("this.redirectInfo=>", this.redirectInfo);
 				if (this.redirectInfo && this.redirectInfo.openType === "switchTab") {
-					console.log(123);
 					uni.switchTab({
 						url: this.redirectInfo.from,
 						compute: () => {

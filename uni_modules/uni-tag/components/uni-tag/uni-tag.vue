@@ -120,7 +120,7 @@
 
 	.uni-tag {
 		line-height: 14px;
-		font-size: 12px;
+		font-size: 14px;
 		font-weight: 200;
 		padding: $tag-default-pd;
 		color: #fff;
@@ -135,7 +135,7 @@
 
 		// size attr
 		&--default {
-			font-size: 12px;
+			font-size: 14px;
 		}
 
 		&--default--inverted {
@@ -145,13 +145,13 @@
 
 		&--small {
 			padding: $tag-small-pd;
-			font-size: 12px;
+			font-size: 14px;
 			border-radius: 2px;
 		}
 
 		&--mini {
 			padding: $tag-mini-pd;
-			font-size: 12px;
+			font-size: 14px;
 			border-radius: 2px;
 		}
 
@@ -246,7 +246,7 @@
 		}
 
 		&--small {
-			font-size: 12px;
+			font-size: 14px;
 		}
 	}
 </style>

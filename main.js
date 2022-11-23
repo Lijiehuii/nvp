@@ -1,7 +1,11 @@
-// #ifndef VUE3
 import Vue from 'vue'
 import App from './App'
 import store from '@/store/store.js'
+import comment from './utils/index.js'
+
+Vue.prototype.$getTime = comment.getTime;
+Vue.prototype.$dataSet = comment.dataSet;
+Vue.prototype.$duration = comment.duration;
 
 // 导入网络请求的包
 import {
@@ -11,7 +15,7 @@ import {
 uni.$http = $http
 
 
-$http.baseUrl = 'https://api-hmugo-web.itheima.net'
+$http.baseUrl = 'https://apis.netstart.cn'
 
 // 请求拦截器
 $http.beforeRequest = function(options) {
@@ -19,13 +23,11 @@ $http.beforeRequest = function(options) {
 		title: "数据加载中..."
 	})
 
-	console.log(options);
-	console.log(store);
-	if (options.url.indexOf('/my/') !== -1) {
-		options.header = {
-			Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIzLCJpYXQiOjE1NjQ3MzAwNzksImV4cCI6MTAwMTU2NDczMDA3OH0.YPt-XeLnjV-_1ITaXGY2FhxmCe4NvXuRnRB8OMCfnPo"
-		}
-	}
+	// if (options.url.indexOf('/my/') !== -1) {
+	// 	options.header = {
+	// 		Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIzLCJpYXQiOjE1NjQ3MzAwNzksImV4cCI6MTAwMTU2NDczMDA3OH0.YPt-XeLnjV-_1ITaXGY2FhxmCe4NvXuRnRB8OMCfnPo"
+	// 	}
+	// }
 }
 
 // 响应拦截器
@@ -51,17 +53,3 @@ const app = new Vue({
 	store
 })
 app.$mount()
-// #endif
-
-// #ifdef VUE3
-import {
-	createSSRApp
-} from 'vue'
-import App from './App.vue'
-export function createApp() {
-	const app = createSSRApp(App)
-	return {
-		app
-	}
-}
-// #endif
