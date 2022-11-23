@@ -65,13 +65,13 @@
 				this.swiperList = this.discoverData.banners
 				this.recommended = this.discoverData.recommended_position
 				this.categories = this.discoverData.categories
-				console.log("this.discoverData=>", this.discoverData);
-				console.log("this.swiperList=>", this.swiperList);
-				console.log("this.recommended=>", this.recommended);
-				console.log("this.categories=>", this.categories);
+				// console.log("this.discoverData=>", this.discoverData);
+				// console.log("this.swiperList=>", this.swiperList);
+				// console.log("this.recommended=>", this.recommended);
+				// console.log("this.categories=>", this.categories);
 			},
 			goToSearch() {
-				console.log(123);
+				// console.log(123);
 				uni.navigateTo({
 					url: "/subpkg/search/search"
 				})

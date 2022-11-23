@@ -1,8 +1,10 @@
 <template>
 	<view class="login-view">
+		<!-- <van-skeleton title avatar row="3" :loading="Loginloading"> -->
 		<uni-icons type="contact-filled" size="100" color="#aaa"></uni-icons>
 		<button type="primary" class="login-btn" @click="getUserProfile">一键登录</button>
 		<text class="tips-text">登录后解锁更多权益</text>
+		<!-- </van-skeleton> -->
 	</view>
 </template>
 
@@ -15,8 +17,11 @@
 		name: "my-login",
 		data() {
 			return {
-
+				Loginloading: true
 			};
+		},
+		onReady() {
+			this.Loginloading = false
 		},
 		computed: {
 			...mapState('m_user', ['redirectInfo'])

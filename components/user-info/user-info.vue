@@ -1,49 +1,51 @@
 <template>
 	<view class="user-info">
-		<view class="top">
-			<view class="img" v-if="userInfoData.avatar">
-				<van-image width="100%" height="100%" round use-loading-slot show-loading show-error lazy-load
-					:src="'https://images.weserv.nl/?url='+userInfoData.avatar">
-					<van-loading slot="loading" type="spinner" size="20" vertical />
-				</van-image>
-			</view>
-			<view class="user-msg">
-				<view class="username">
-					{{userInfoData.username}}
+		<van-skeleton title avatar row="3" :loading="infoLoading">
+			<view class="top">
+				<view class="img" v-if="userInfoData.avatar">
+					<van-image width="100%" height="100%" round use-loading-slot show-loading show-error lazy-load
+						:src="'https://images.weserv.nl/?url='+userInfoData.avatar">
+						<van-loading slot="loading" type="spinner" size="20" vertical />
+					</van-image>
 				</view>
-				<view class="city">
-					{{userInfoData.ip_location}}
-				</view>
-			</view>
-		</view>
-		<view class="sign">
-			{{userInfoData.verify_description ? userInfoData.verify_description :"暂无简介" }}
-		</view>
-		<view class="user-bottom">
-			<view class="left">
-				<view class="data">
-					<view class="count">
-						{{popularity}}
+				<view class="user-msg">
+					<view class="username">
+						{{userInfoData.username}}
 					</view>
-					人气
-				</view>
-				<view class="data">
-					<view class="count">
-						{{follower}}
+					<view class="city">
+						{{userInfoData.ip_location}}
 					</view>
-					粉丝
-				</view>
-				<view class="data">
-					<view class="count">
-						{{followee}}
-					</view>
-					关注
 				</view>
 			</view>
-			<view class="right" :class="{followed:userInfoData.follow}" @click="followUser(userInfoData)">
-				{{userInfoData.follow ? "已关注" : "关注"}}
+			<view class="sign">
+				{{userInfoData.verify_description ? userInfoData.verify_description :"暂无简介" }}
 			</view>
-		</view>
+			<view class="user-bottom">
+				<view class="left">
+					<view class="data">
+						<view class="count">
+							{{popularity}}
+						</view>
+						人气
+					</view>
+					<view class="data">
+						<view class="count">
+							{{follower}}
+						</view>
+						粉丝
+					</view>
+					<view class="data">
+						<view class="count">
+							{{followee}}
+						</view>
+						关注
+					</view>
+				</view>
+				<view class="right" :class="{followed:userInfoData.follow}" @click="followUser(userInfoData)">
+					{{userInfoData.follow ? "已关注" : "关注"}}
+				</view>
+			</view>
+		</van-skeleton>
 	</view>
 </template>
 
@@ -61,8 +63,15 @@
 		name: "user-info",
 		data() {
 			return {
-
+				infoLoading: true
 			};
+		},
+		watch: {
+			userInfoData(newVal) {
+				if (newVal !== {}) {
+					this.infoLoading = false
+				}
+			}
 		},
 		computed: {
 			popularity() {

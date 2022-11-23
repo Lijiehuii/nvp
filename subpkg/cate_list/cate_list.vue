@@ -46,7 +46,6 @@
 			}, 1000)
 		},
 		onReachBottom() {
-			console.log("到底了");
 			if (this.isLoading || this.nomore) {
 				return
 			}
@@ -65,14 +64,8 @@
 		},
 		methods: {
 			getCateList() {
+				console.log(this.cateid);
 				this.isLoading = true
-				// const {
-				// 	data: res
-				// } = await uni.$http.get("/xpc/articles?category_id=" + this.cateid + "&page=" + this.page)
-				// this.cateList = [...this.cateList, ...res.data.list]
-				// console.log("this.cateList=>", this.cateList);
-				// console.log(cate1);
-				// console.log("id=>", id);
 				if (this.page === 1) {
 					this.cateList = [...this.cateList, ...cate1_1.list]
 				} else if (this.page === 2) {
@@ -80,7 +73,15 @@
 				} else if (this.page === 3) {
 					this.cateList = [...this.cateList, ...cate1_3.list]
 				}
-				console.log("this.cateList=>", this.cateList);
+				// const {
+				// 	data: res
+				// } = await uni.$http.get("/xpc/articles?category_id=" + this.cateid + "&page=" + this.page)
+				// console.log(res);
+				console.log("id=>", this.cateid);
+				// this.cateList = [...this.cateList, ...res.data.list]
+				// console.log("this.cateList=>", this.cateList);
+
+				// console.log("this.cateList=>", this.cateList);
 				this.isLoading = false
 			},
 			goToCateListDetail(item) {

@@ -119,6 +119,12 @@
 		top: 0;
 		left: 0;
 
+		.search-bar {
+			position: sticky;
+			top: 0;
+			left: 0;
+		}
+
 		.search-list {
 			padding: 0 5px;
 		}

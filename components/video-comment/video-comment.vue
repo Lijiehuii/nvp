@@ -1,18 +1,20 @@
 <template>
 	<view class="comment">
-		<view class="comment-wrapper" v-if="videoCommentData.list.length !== 0">
-			<view v-for="(item,i) in videoCommentData.list" :key="i">
-				<comment-list :commentData="item"></comment-list>
+		<van-skeleton title avatar row="3" :loading="commentloading">
+			<view class="comment-wrapper" v-if="videoCommentData.list.length !== 0">
+				<view v-for="(item,i) in videoCommentData.list" :key="i">
+					<comment-list :commentData="item"></comment-list>
+				</view>
 			</view>
-		</view>
-		<view class="comment-input">
-			<input :value="inputVal" type="text" placeholder="我有话要说" @input="onchange" />
-			<!-- <input class="uni-input" focus placeholder="自动获得焦点" /> -->
-			<button :disabled="!inputVal" @click="send">发布</button>
-		</view>
-		<view class="nocomment" v-if="videoCommentData.list.length === 0">
-			暂时还没有人评论,快发布评论抢沙发~
-		</view>
+			<view class="comment-input">
+				<input :value="inputVal" type="text" placeholder="我有话要说" @input="onchange" />
+				<!-- <input class="uni-input" focus placeholder="自动获得焦点" /> -->
+				<button :disabled="!inputVal" @click="send">发布</button>
+			</view>
+			<view class="nocomment" v-if="videoCommentData.list.length === 0">
+				暂时还没有人评论,快发布评论抢沙发~
+			</view>
+		</van-skeleton>
 	</view>
 </template>
 
@@ -34,11 +36,19 @@
 		name: "video-comment",
 		data() {
 			return {
+				commentloading: false,
 				inputVal: ""
 			};
 		},
 		computed: {
 			...mapState("m_user", ["userinfo"])
+		},
+		watch: {
+			videoCommentData(newVal) {
+				if (newVal !== {}) {
+					this.commentloading = false
+				}
+			}
 		},
 		methods: {
 			onchange(e) {

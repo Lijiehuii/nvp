@@ -23,6 +23,7 @@
 
 <style lang="scss">
 	.user-like {
+		height: calc(100vh - 262px);
 		padding: 20rpx;
 		box-sizing: border-box;
 	}

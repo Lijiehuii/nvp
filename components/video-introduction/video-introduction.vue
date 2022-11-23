@@ -50,8 +50,10 @@
 			</view>
 		</view>
 		<view class="video-like">
-			<view class="title">{{VideoLikeData.title}}</view>
-			<video-likecard v-for="(like,i) in VideoLikeData.list" :likeData="like" :key="i"></video-likecard>
+			<van-skeleton title avatar row="3" :loading="likeloading">
+				<view class="title">{{VideoLikeData.title}}</view>
+				<video-likecard v-for="(like,i) in VideoLikeData.list" :likeData="like" :key="i"></video-likecard>
+			</van-skeleton>
 		</view>
 		</van-skeleton>
 	</view>
@@ -76,6 +78,7 @@
 		data() {
 			return {
 				loading: true,
+				likeloading: true
 			};
 		},
 		watch: {
@@ -83,7 +86,12 @@
 				if (newVal !== "undefined") {
 					this.loading = false
 				}
-			}
+			},
+			VideoLikeData(newVal) {
+				if (newVal !== "undefined") {
+					this.likeloading = false
+				}
+			},
 		},
 		methods: {
 			...mapMutations("m_user", ["updateFollowUser", "filterFollowUser", "updateCollection", "filterCollection",

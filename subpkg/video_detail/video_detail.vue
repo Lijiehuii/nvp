@@ -4,7 +4,7 @@
 			<view class="video" @touchend="dblclick">
 				<view class="video-context">
 					<video :autoplay="true" :controls="true" id="video" loop
-						:src="videoDetailData.video.content.progressive[0].https_url"
+						:src="'https://images.weserv.nl/?url='+videoDetailData.video.content.progressive[0].https_url"
 						@fullscreenchange="screenChange"></video>
 				</view>
 			</view>
@@ -39,14 +39,12 @@
 		data() {
 			return {
 				video_id: 0,
-				// videoDetailData: {},
 				videoDetailData: {},
 				touchNum: 0,
 				play: true,
 				videoContext: "",
 				fullscreen: false,
 				videoController: true,
-				// VideoLikeData: videolike10934897,
 				VideoLikeData: {},
 				videoResourceData: {},
 				showTab: true,
@@ -61,10 +59,8 @@
 				title: "数据加载中..."
 			})
 			this.videoContext = uni.createVideoContext("video", this);
-			// console.log(options);
 			this.video_id = options.video_id
 			this.getVideoDetail()
-			// this.toplay()
 			this.getVideoLike()
 			this.getVideoResource()
 		},
@@ -113,7 +109,6 @@
 				const {
 					data: res
 				} = await uni.$http.get("/xpc/article/" + this.video_id)
-				console.log(res);
 				uni.hideLoading()
 				if (res.message !== "OK") {
 					this.failLoading = true
@@ -168,7 +163,8 @@
 					data: res
 				} = await uni.$http.get("/xpc/article/" + this.video_id + "/next")
 				console.log("Like=>", res);
-				if (res && res.status === 0) {
+
+				if (res) {
 					this.VideoLikeData = res.data
 				} else {
 					this.VideoLikeData = videoresource10934897
@@ -178,7 +174,7 @@
 				const {
 					data: res
 				} = await uni.$http.get("/xpc/comments?resource_id=" + this.video_id)
-				if (res && res.status === 0) {
+				if (res) {
 					this.videoResourceData = res.data
 				} else {
 					this.videoResourceData = videolike10934897
@@ -222,7 +218,7 @@
 		position: relative;
 		top: 0;
 		left: 0;
-		z-index: 999;
+		// z-index: 999;
 
 		video {
 			width: 100%;
